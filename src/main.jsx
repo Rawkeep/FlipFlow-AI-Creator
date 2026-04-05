@@ -10,11 +10,20 @@ import {
   verifyMasterPassword, getStoredTokens,
 } from "./auth.js";
 
+// Auto-detect GitHub Pages demo mode
+const IS_DEMO = window.location.hostname.includes("github.io");
+
 function AppRouter() {
   const [view, setView] = useState("loading"); // loading | landing | admin | app
   const [session, setSessionState] = useState(null);
 
   useEffect(() => {
+    // GitHub Pages = demo mode, skip auth
+    if (IS_DEMO) {
+      setSessionState({ token: "DEMO", isAdmin: false });
+      setView("app");
+      return;
+    }
     // Check existing session
     const existing = getSession();
     if (existing) {
