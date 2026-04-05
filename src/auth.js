@@ -1,6 +1,8 @@
-// ─── Token Auth System ───
-// Tokens are validated client-side against a set of valid tokens.
-// For production with a backend: replace validateToken with an API call.
+// ─── Client-side Auth Helpers ───
+// Authentication is handled server-side via JWT (see server/auth.js).
+// This module provides client-side session management and token storage
+// for the demo/offline mode. When a backend is available, use the
+// /api/auth/* endpoints instead.
 
 const AUTH_KEY = "flipflow_auth";
 const TOKENS_KEY = "flipflow_admin_tokens";
@@ -106,7 +108,7 @@ export function clearSession() {
   localStorage.removeItem(AUTH_KEY);
 }
 
-// ── Admin check: first token created = admin token, or master password ──
+// ── Admin check ──
 
 const ADMIN_KEY = "flipflow_is_admin";
 
@@ -118,10 +120,13 @@ export function setAdmin(val) {
   localStorage.setItem(ADMIN_KEY, val ? "true" : "false");
 }
 
-// ── Master password for initial admin setup ──
-// In production, set this via env var. Default for demo:
-const MASTER_PASSWORD = "flipflow2024";
+// ── Master password removed ──
+// Authentication is now handled server-side via /api/auth/login.
+// For the demo/offline mode (github.io), auth is bypassed entirely.
+// See server/auth.js for the production auth implementation.
 
-export function verifyMasterPassword(pw) {
-  return pw === MASTER_PASSWORD;
+export function verifyMasterPassword() {
+  // No-op: server-side auth only. This stub keeps the demo landing page
+  // from crashing if it still references this function.
+  return false;
 }

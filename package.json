@@ -1,9 +1,15 @@
 {
   "name": "flipflow-pro",
-  "private": false,
+  "private": true,
   "version": "1.0.0",
-  "description": "FlipFlow Pro — Multi-Plattform Arbitrage Engine",
+  "description": "FlipFlow Pro — Multi-Platform Arbitrage & Resale Engine",
+  "license": "MIT",
+  "author": "FlipFlow Team",
+  "keywords": ["arbitrage", "resale", "ebay", "etsy", "flipflow", "price-comparison"],
   "type": "module",
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "scripts": {
     "dev": "concurrently \"vite\" \"node server/index.js\"",
     "dev:frontend": "vite",
@@ -11,12 +17,19 @@
     "build": "vite build",
     "preview": "vite preview",
     "server": "node server/index.js",
-    "start": "concurrently \"vite preview\" \"node server/index.js\""
+    "start": "node server/index.js",
+    "docker:build": "docker build -t flipflow-pro .",
+    "docker:up": "docker compose up -d"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "better-sqlite3": "^12.8.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^5.1.0",
+    "express-rate-limit": "^8.3.2",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.3",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },

@@ -72,8 +72,18 @@ router.post("/csv", (req, res, next) => {
 
     if (!csv.trim()) return res.status(400).json({ error: "CSV darf nicht leer sein" });
 
+    // Validate CSV size
+    const MAX_CSV_SIZE = 2 * 1024 * 1024; // 2 MB
+    const MAX_CSV_ROWS = 5000;
+    if (csv.length > MAX_CSV_SIZE) {
+      return res.status(400).json({ error: `CSV too large (max ${MAX_CSV_SIZE / 1024 / 1024} MB)` });
+    }
+
     const lines = csv.trim().split("\n");
     if (lines.length < 2) return res.status(400).json({ error: "CSV braucht Header + mindestens eine Zeile" });
+    if (lines.length > MAX_CSV_ROWS + 1) {
+      return res.status(400).json({ error: `CSV too many rows (max ${MAX_CSV_ROWS})` });
+    }
 
     const headers = lines[0].split(";").map(h => h.trim().toLowerCase());
     const listings = [];

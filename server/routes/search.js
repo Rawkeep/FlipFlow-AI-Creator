@@ -19,7 +19,21 @@ router.post("/", async (req, res, next) => {
       return res.status(400).json({ error: "Mindestens ein Keyword oder eine Kategorie nötig" });
     }
 
-    const queries = keywords.length > 0 ? keywords : categories;
+    // Input validation
+    const MAX_KEYWORD_LEN = 200;
+    const MAX_KEYWORDS = 20;
+    if (keywords.length > MAX_KEYWORDS) {
+      return res.status(400).json({ error: `Maximum ${MAX_KEYWORDS} keywords allowed` });
+    }
+    for (const kw of keywords) {
+      if (typeof kw !== "string" || kw.length > MAX_KEYWORD_LEN) {
+        return res.status(400).json({ error: `Each keyword must be a string of max ${MAX_KEYWORD_LEN} chars` });
+      }
+    }
+    // Sanitize keywords: strip control chars
+    const sanitizedKeywords = keywords.map(k => k.replace(/[\x00-\x1F\x7F]/g, "").trim()).filter(Boolean);
+
+    const queries = sanitizedKeywords.length > 0 ? sanitizedKeywords : categories;
     const allItems = [];
     const errors = [];
 

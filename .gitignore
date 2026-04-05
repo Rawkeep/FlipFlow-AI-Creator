@@ -7,3 +7,9 @@ dist/
 .env.production
 .env.*.local
 !.env.example
+
+# SQLite data
+data/
+*.db
+*.db-wal
+*.db-shm
